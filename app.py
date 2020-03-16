@@ -6,7 +6,7 @@ from flask_restful import Api
 from flask_jwt import JWT
 
 from security import authenticate, identity
-from resources.user import UserRegister
+from resources.user import UserRegister, User
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
@@ -19,6 +19,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
 )
 # turn tracking off
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# allows flask app to see error
+# i.e. flask_jwt etc, can raise their own exceptions
+app.config['PROPAGATE_EXCEPTIONS'] = True
 db.init_app(app)
 # this key SHOULD be SECRET!
 app.secret_key = 'seraphina'
@@ -49,6 +52,11 @@ api.add_resource(
 api.add_resource(
     StoreList,
     '/stores'
+)
+
+api.add_resource(
+    User,
+    '/user/<int:user_id>'
 )
 
 # how to avoid running app.py from import
