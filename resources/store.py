@@ -33,4 +33,6 @@ class Store(Resource):
 
 class StoreList(Resource):
     def get(self):
-        return {'stores': [store.json() for store in StoreModel.query.all()]}
+        # don't want query accessing resource
+        # we don't want resource interacting with db
+        return {'stores': [store.json() for store in StoreModel.find_all()]}

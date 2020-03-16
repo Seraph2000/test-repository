@@ -29,7 +29,11 @@ class Item(Resource):
 
     def post(self, name):
         if ItemModel.find_by_name(name):
-            return {'message': "An item with name '{}' already exists.".format(name)}
+            return {
+                'message': "An item with name '{}' already exists.".format(
+                    name
+                )
+            }
 
         data = Item.parser.parse_args()
 
@@ -37,7 +41,7 @@ class Item(Resource):
 
         try:
             item.save_to_db()
-        except:
+        except BaseException:
             return {"message": "An error occurred inserting the item."}
 
         return item.json(), 201
@@ -70,4 +74,4 @@ class ItemList(Resource):
     TABLE_NAME = 'items'
 
     def get(self):
-        return {'items': [item.json() for item in ItemModel.query.all()]}
+        return {'items': [item.json() for item in ItemModel.find_all()]}
